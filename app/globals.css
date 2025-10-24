@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+body {
+  @apply bg-gray-900;
+  background-image: radial-gradient(circle at 1px 1px, #4a5568 1px, transparent 0);
+  background-size: 20px 20px;
+}
