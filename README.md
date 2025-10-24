@@ -1,6 +1,6 @@
-# 📖 Litra Hub
+# 📖 Akari Translations
 
-Litra Hub is a platform dedicated to providing high-quality light novel translations for enthusiasts. Our goal is to offer a comfortable and enjoyable reading experience, allowing users to dive into captivating stories from various authors.
+Akari Translations is a platform dedicated to providing high-quality light novel translations for enthusiasts. Our goal is to offer a comfortable and enjoyable reading experience, allowing users to dive into captivating stories from various authors.
 
 ## Features
 

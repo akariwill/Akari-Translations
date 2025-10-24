@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "generate-novels-data": "node scripts/generate-novels-data.js",
+    "build": "npm run generate-novels-data && next build",
     "start": "next start",
     "lint": "eslint"
   },

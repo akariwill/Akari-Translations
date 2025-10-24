@@ -7,7 +7,18 @@ export default function Home() {
   useEffect(() => {
     fetch("/api/novels")
       .then((res) => res.json())
-      .then(setNovels);
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setNovels(data);
+        } else {
+          console.error("API returned non-array data:", data);
+          setNovels([]); // Ensure novels is always an array
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching novels:", error);
+        setNovels([]); // Ensure novels is always an array on error
+      });
   }, []);
 
   return (
@@ -27,6 +38,17 @@ export default function Home() {
         <div className="text-center mb-12">
           <h2 className="text-4xl font-extrabold">Welcome to Akari Translations</h2>
           <p className="text-lg text-gray-400 mt-2">Your source for high-quality light novel translations.</p>
+          <div className="mt-6">
+            <a
+              href="https://drive.google.com/drive/folders/1iCn5w1qr3x_R07dIp0cjiETt-JWl_sZ5?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 inline-flex items-center"
+            >
+              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13 10V3L4 10h7v7L13 10z"></path></svg>
+              Download Novels (Google Drive)
+            </a>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
