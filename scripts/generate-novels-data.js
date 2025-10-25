@@ -34,6 +34,20 @@ async function generateNovelsData() {
       }
     }
 
+    const extractVolumeNumber = (filename) => {
+      const match = filename.match(/Volume\s+(\d+(\.\d+)?)/i);
+      if (match && match[1]) {
+        return parseFloat(match[1]);
+      }
+      return Infinity;
+    };
+
+    volumes.sort((a, b) => {
+      const numA = extractVolumeNumber(a);
+      const numB = extractVolumeNumber(b);
+      return numA - numB;
+    });
+
     return {
       title: folder,
       cover: cover ? `/novels/${folder}/${cover}` : null,
