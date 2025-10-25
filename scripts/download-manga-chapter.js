@@ -5,8 +5,8 @@ const fetch = require('node-fetch').default;
 const EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
 
 const MANGA_METADATA = {
-  "Class-de-2-banme-ni-Kawaii-Onnanoko-to-Tomodachi-ni-Natta": {
-    baseUrl: "https://ytimgf.youtube-anime.com/images133/AEhXXEnFnf7Tk2CiZ",
+  "Chitose-Kun-wa-Ramune-Bin-no-Naka": {
+    baseUrl: "https://ytimgf.youtube-anime.com/images133/aFReNYSRgNwNvyCjq/",
   },
   // "Another-Manga-Title": {
   //   baseUrl: "https://example.com/manga/another-manga-title",
@@ -16,11 +16,19 @@ const MANGA_METADATA = {
 // Define your download jobs here
 const DOWNLOAD_JOBS = [
   {
-    mangaTitle: "Class-de-2-banme-ni-Kawaii-Onnanoko-to-Tomodachi-ni-Natta",
+    mangaTitle: "Chitose-Kun-wa-Ramune-Bin-no-Naka",
     // Specify chapter number and its configuration
     chapters: {
-      "35.1": { imageCount: 18 , sub: "sub_1760883975" },
-      "35.2": { imageCount: 12 , sub: "sub_1760964007" },
+      "21": { imageCount: 45, sub: "sub_1728494838" },
+      "22": { imageCount: 45, sub: "sub_1728494858" },
+      "23": { imageCount: 45, sub: "sub_1728494883" },
+      "24": { imageCount: 48, sub: "sub_1728494903" },
+      "24.5": { imageCount: 6, sub: "sub_1750715765" },
+      "25": { imageCount: 63, sub: "sub_1756736182" },
+      "26": { imageCount: 65, sub: "sub_1756810559" },
+      "27": { imageCount: 52, sub: "sub_1756810605" },
+      "28": { imageCount: 52, sub: "sub_1756810645" },
+      "28.5": { imageCount: 4, sub: "sub_1756810686" },
     },
   },
   // {
