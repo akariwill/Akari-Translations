@@ -19,12 +19,8 @@ const DOWNLOAD_JOBS = [
     mangaTitle: "Class-de-2-banme-ni-Kawaii-Onnanoko-to-Tomodachi-ni-Natta",
     // Specify chapter number and its configuration
     chapters: {
-      "6": { imageCount: 32 },
-      "6.5": { imageCount: 10, sub: "sub_1753627417" }, 
-      "7": { imageCount: 40 },
-      "8": { imageCount: 28 },
-      "9": { imageCount: 22 },
-      "10": { imageCount: 29 },
+      "25": { imageCount: 31 , sub: "sub_1724941069" },
+      // "24.2": { imageCount: 16 , sub: "sub_1724941263" },
     },
   },
   // {
@@ -40,7 +36,11 @@ const DOWNLOAD_JOBS = [
 
 async function downloadImage(imageUrl, filePath) {
   try {
-    const response = await fetch(imageUrl);
+    const response = await fetch(imageUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    });
     if (response.ok) {
       const buffer = await response.buffer();
       fs.writeFileSync(filePath, buffer);
