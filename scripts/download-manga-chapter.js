@@ -19,8 +19,8 @@ const DOWNLOAD_JOBS = [
     mangaTitle: "Class-de-2-banme-ni-Kawaii-Onnanoko-to-Tomodachi-ni-Natta",
     // Specify chapter number and its configuration
     chapters: {
-      "25": { imageCount: 31 , sub: "sub_1724941069" },
-      // "24.2": { imageCount: 16 , sub: "sub_1724941263" },
+      "35.1": { imageCount: 18 , sub: "sub_1760883975" },
+      "35.2": { imageCount: 12 , sub: "sub_1760964007" },
     },
   },
   // {
