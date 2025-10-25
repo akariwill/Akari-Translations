@@ -5,8 +5,8 @@ const fetch = require('node-fetch').default;
 const EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
 
 const MANGA_METADATA = {
-  "Otonari-Asobi": {
-    baseUrl: "https://ytimgf.youtube-anime.com/images133/aQLDaYr9AmQNFcKqJ/",
+  "Gal-Yome-no-Himitsu": {
+    baseUrl: "https://ytimgf.youtube-anime.com/images133/firws7cTP9gwP4XRB",
   },
   // "Another-Manga-Title": {
   //   baseUrl: "https://example.com/manga/another-manga-title",
@@ -16,25 +16,20 @@ const MANGA_METADATA = {
 // Define your download jobs here
 const DOWNLOAD_JOBS = [
   {
-    mangaTitle: "Otonari-Asobi",
+    mangaTitle: "Gal-Yome-no-Himitsu",
     // Specify chapter number and its configuration
     chapters: {
-      "11": { imageCount: 23 , sub: "sub_1751672752" },
-      "12": { imageCount: 24 , sub: "sub_1752886032" },
-      "13": { imageCount: 26 , sub: "sub_1752886058" },
-      "13.5": { imageCount: 5 , sub: "sub_1756335764" },
-      "14": { imageCount: 30 , sub: "sub_1752886077" },
-      "15": { imageCount: 26 , sub: "sub_1752939123" },
-      "16": { imageCount: 23 , sub: "sub_1755318835" },
-      "17": { imageCount: 22 , sub: "sub_1755318657" },
-      "18": { imageCount: 23 , sub: "sub_1755738962" },
-      "19": { imageCount: 17 , sub: "sub_1755821772" },
-      "20": { imageCount: 19 , sub: "sub_1755876120" },
-      "21": { imageCount: 21 , sub: "sub_1755978354" },
-      "22": { imageCount: 29 , sub: "sub_1756226802" },
-      "23": { imageCount: 24 , sub: "sub_1756340237" },
-      "24": { imageCount: 24 , sub: "sub_1760368138" },
-      "25": { imageCount: 25 , sub: "sub_1761257813" },
+      "31": { imageCount: 16 , sub: "sub_1743047174"},
+      "32": { imageCount: 15 , sub: "sub_1743486326"},
+      "33": { imageCount: 21 , sub: "sub_1745657130"},
+      "34": { imageCount: 15 , sub: "sub_1746849624"},
+      "35": { imageCount: 15 , sub: "sub_1749191496"},
+      "36": { imageCount: 13 , sub: "sub_1750644092"},
+      "37": { imageCount: 14 , sub: "sub_1751857256"},
+      "38": { imageCount: 13 , sub: "sub_1753799550"},
+      "39": { imageCount: 17 , sub: "sub_1754976671"},
+      "40": { imageCount: 14 , sub: "sub_1756093544"},
+      "41": { imageCount: 14 , sub: "sub_1758689490"},
     },
   },
   // {
