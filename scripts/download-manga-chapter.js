@@ -5,9 +5,14 @@ const fetch = require('node-fetch').default;
 const EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
 
 const MANGA_METADATA = {
-  "Gal-Yome-no-Himitsu": {
-    baseUrl: "https://ytimgf.youtube-anime.com/images133/firws7cTP9gwP4XRB",
+  "Sensei-wa-Koi-wo-Oshierarenai": {
+    baseUrl: "https://ytimgf.youtube-anime.com/images138/yTX9xTpQqPLaKJckB/",
+    version: "v1"
   },
+  // "Sensei-wa-Koi-wo-Oshierarenai": {
+  //   baseUrl: "https://ytimgf.youtube-anime.com/images7/yTX9xTpQqPLaKJckB/47/sub_1.png",
+  //   version: "v2"
+  // },
   // "Another-Manga-Title": {
   //   baseUrl: "https://example.com/manga/another-manga-title",
   // },
@@ -16,20 +21,10 @@ const MANGA_METADATA = {
 // Define your download jobs here
 const DOWNLOAD_JOBS = [
   {
-    mangaTitle: "Gal-Yome-no-Himitsu",
+    mangaTitle: "Sensei-wa-Koi-wo-Oshierarenai",
     // Specify chapter number and its configuration
     chapters: {
-      "31": { imageCount: 16 , sub: "sub_1743047174"},
-      "32": { imageCount: 15 , sub: "sub_1743486326"},
-      "33": { imageCount: 21 , sub: "sub_1745657130"},
-      "34": { imageCount: 15 , sub: "sub_1746849624"},
-      "35": { imageCount: 15 , sub: "sub_1749191496"},
-      "36": { imageCount: 13 , sub: "sub_1750644092"},
-      "37": { imageCount: 14 , sub: "sub_1751857256"},
-      "38": { imageCount: 13 , sub: "sub_1753799550"},
-      "39": { imageCount: 17 , sub: "sub_1754976671"},
-      "40": { imageCount: 14 , sub: "sub_1756093544"},
-      "41": { imageCount: 14 , sub: "sub_1758689490"},
+      "1": { imageCount: 18 },
     },
   },
   // {
@@ -97,6 +92,36 @@ async function downloadMangaChapter(mangaTitle, chapterNumber, baseUrl, imageCou
   console.log(`Finished downloading ${mangaTitle} - Chapter ${chapterNumber}.`);
 }
 
+async function downloadMangaChapterV2(mangaTitle, chapterNumber, baseUrl, imageCount, sub = 'sub') {
+  const chapterFolderName = `Chapter ${chapterNumber}`;
+  const targetDir = path.join(process.cwd(), 'public', 'manga', mangaTitle, chapterFolderName);
+
+  if (!fs.existsSync(targetDir)) {
+    fs.mkdirSync(targetDir, { recursive: true });
+    console.log(`Created directory: ${targetDir}`);
+  }
+
+  console.log(`\nStarting download for ${mangaTitle} - Chapter ${chapterNumber} (${imageCount} images)`);
+
+  for (let i = 1; i <= imageCount; i++) {
+    let downloaded = false;
+    for (const ext of EXTENSIONS) {
+      const imageUrl = `${baseUrl}${chapterNumber}/${sub}_${i}.${ext}`;
+      const fileName = `${String(i).padStart(3, '0')}.${ext}`;
+      const filePath = path.join(targetDir, fileName);
+
+      if (await downloadImage(imageUrl, filePath)) {
+        downloaded = true;
+        break;
+      }
+    }
+    if (!downloaded) {
+      console.warn(`Could not download page ${i} for ${mangaTitle} - Chapter ${chapterNumber}.`);
+    }
+  }
+  console.log(`Finished downloading ${mangaTitle} - Chapter ${chapterNumber}.`);
+}
+
 async function main() {
   if (!DOWNLOAD_JOBS || DOWNLOAD_JOBS.length === 0) {
     console.log('No download jobs found in the configuration.');
@@ -137,13 +162,23 @@ async function main() {
         continue;
       }
 
-      await downloadMangaChapter(
-        mangaTitle,
-        chapterNum,
-        mangaMetadata.baseUrl,
-        imageCount,
-        sub // Pass sub; it will be undefined if not present, and the default will be used
-      );
+      if (mangaMetadata.version === 'v2') {
+        await downloadMangaChapterV2(
+          mangaTitle,
+          chapterNum,
+          mangaMetadata.baseUrl,
+          imageCount,
+          sub // Pass sub; it will be undefined if not present, and the default will be used
+        );
+      } else {
+        await downloadMangaChapter(
+          mangaTitle,
+          chapterNum,
+          mangaMetadata.baseUrl,
+          imageCount,
+          sub // Pass sub; it will be undefined if not present, and the default will be used
+        );
+      }
     }
   }
 
