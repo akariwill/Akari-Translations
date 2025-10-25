@@ -5,8 +5,8 @@ const fetch = require('node-fetch').default;
 const EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
 
 const MANGA_METADATA = {
-  "Chitose-Kun-wa-Ramune-Bin-no-Naka": {
-    baseUrl: "https://ytimgf.youtube-anime.com/images133/aFReNYSRgNwNvyCjq/",
+  "Otonari-Asobi": {
+    baseUrl: "https://ytimgf.youtube-anime.com/images133/aQLDaYr9AmQNFcKqJ/",
   },
   // "Another-Manga-Title": {
   //   baseUrl: "https://example.com/manga/another-manga-title",
@@ -16,19 +16,25 @@ const MANGA_METADATA = {
 // Define your download jobs here
 const DOWNLOAD_JOBS = [
   {
-    mangaTitle: "Chitose-Kun-wa-Ramune-Bin-no-Naka",
+    mangaTitle: "Otonari-Asobi",
     // Specify chapter number and its configuration
     chapters: {
-      "21": { imageCount: 45, sub: "sub_1728494838" },
-      "22": { imageCount: 45, sub: "sub_1728494858" },
-      "23": { imageCount: 45, sub: "sub_1728494883" },
-      "24": { imageCount: 48, sub: "sub_1728494903" },
-      "24.5": { imageCount: 6, sub: "sub_1750715765" },
-      "25": { imageCount: 63, sub: "sub_1756736182" },
-      "26": { imageCount: 65, sub: "sub_1756810559" },
-      "27": { imageCount: 52, sub: "sub_1756810605" },
-      "28": { imageCount: 52, sub: "sub_1756810645" },
-      "28.5": { imageCount: 4, sub: "sub_1756810686" },
+      "11": { imageCount: 23 , sub: "sub_1751672752" },
+      "12": { imageCount: 24 , sub: "sub_1752886032" },
+      "13": { imageCount: 26 , sub: "sub_1752886058" },
+      "13.5": { imageCount: 5 , sub: "sub_1756335764" },
+      "14": { imageCount: 30 , sub: "sub_1752886077" },
+      "15": { imageCount: 26 , sub: "sub_1752939123" },
+      "16": { imageCount: 23 , sub: "sub_1755318835" },
+      "17": { imageCount: 22 , sub: "sub_1755318657" },
+      "18": { imageCount: 23 , sub: "sub_1755738962" },
+      "19": { imageCount: 17 , sub: "sub_1755821772" },
+      "20": { imageCount: 19 , sub: "sub_1755876120" },
+      "21": { imageCount: 21 , sub: "sub_1755978354" },
+      "22": { imageCount: 29 , sub: "sub_1756226802" },
+      "23": { imageCount: 24 , sub: "sub_1756340237" },
+      "24": { imageCount: 24 , sub: "sub_1760368138" },
+      "25": { imageCount: 25 , sub: "sub_1761257813" },
     },
   },
   // {
