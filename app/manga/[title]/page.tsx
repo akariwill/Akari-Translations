@@ -23,6 +23,14 @@ export default function MangaDetails() {
   const [manga, setManga] = useState<Manga | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastReadChapter, setLastReadChapter] = useState<string | null>(null);
+
+  useEffect(() => {
+    const history = JSON.parse(localStorage.getItem('mangaHistory') || '{}');
+    if (title && history[title as string]) {
+      setLastReadChapter(history[title as string]);
+    }
+  }, [title]);
 
   useEffect(() => {
     async function fetchMangaDetails() {
@@ -93,19 +101,34 @@ export default function MangaDetails() {
             </div>
             <div className="md:w-2/3">
               <h1 className="text-4xl font-bold mb-4">{manga.title}</h1>
+              {lastReadChapter && (
+                <Link
+                  href={`/manga/${encodeURIComponent(manga.title)}/${encodeURIComponent(lastReadChapter)}`}
+                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+                >
+                  Continue Reading: {lastReadChapter}
+                </Link>
+              )}
               <p className="text-gray-400 mb-6">{manga.synopsis}</p>
 
               <h2 className="text-2xl font-bold mb-4">Chapters</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {manga.chapters.map((chapter, index) => (
-                  <Link
-                    key={index}
-                    href={`/manga/${encodeURIComponent(manga.title)}/${encodeURIComponent(chapter.title)}`}
-                    className="bg-gray-800 rounded-lg shadow-lg p-4 text-center hover:bg-gray-700 transition-colors duration-300 block"
-                  >
-                    {chapter.title}
-                  </Link>
-                ))}
+                {manga.chapters.map((chapter, index) => {
+                  const isLastRead = chapter.title === lastReadChapter;
+                  return (
+                    <Link
+                      key={index}
+                      href={`/manga/${encodeURIComponent(manga.title)}/${encodeURIComponent(chapter.title)}`}
+                      className={`rounded-lg shadow-lg p-4 text-center transition-colors duration-300 block ${
+                        isLastRead
+                          ? 'bg-blue-800 hover:bg-blue-700 font-bold'
+                          : 'bg-gray-800 hover:bg-gray-700'
+                      }`}
+                    >
+                      {chapter.title}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </div>
