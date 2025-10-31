@@ -2,7 +2,20 @@
 
 /* @tailwind base;
 @tailwind components;
-@tailwind utilities; */
+@tailwind utilities;
+
+html, body, #__next {
+  height: 100%;
+}
+
+#__next {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+} */
 
 body {
   @apply bg-gray-900;

@@ -142,14 +142,14 @@ export default function MangaReader({ mangaTitle, chapterTitle }: MangaReaderPro
           <button
             onClick={handlePrevChapter}
             disabled={!prevChapter}
-            className="px-3 py-2 bg-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-600 transition-colors"
+            className="hidden md:block px-3 py-2 bg-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-600 transition-colors"
           >
             Prev
           </button>
           <button
             onClick={handleNextChapter}
             disabled={!nextChapter}
-            className="px-3 py-2 bg-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-600 transition-colors"
+            className="hidden md:block px-3 py-2 bg-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-600 transition-colors"
           >
             Next
           </button>
@@ -204,7 +204,7 @@ export default function MangaReader({ mangaTitle, chapterTitle }: MangaReaderPro
               disabled={pageNumber <= 1}
               className="px-4 py-2 bg-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-600 transition-colors"
             >
-              Previous
+              &lt;
             </button>
             <p className="text-lg font-semibold">
               {pageNumber} / {numPages}
@@ -214,22 +214,24 @@ export default function MangaReader({ mangaTitle, chapterTitle }: MangaReaderPro
               disabled={pageNumber >= numPages}
               className="px-4 py-2 bg-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-600 transition-colors"
             >
-              Next
+              &gt;
             </button>
           </>
         )}
-        <button
-          onClick={() => setZoom(z => z + 0.1)}
-          className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
-        >
-          Zoom In
-        </button>
-        <button
-          onClick={() => setZoom(z => Math.max(0.1, z - 0.1))}
-          className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
-        >
-          Zoom Out
-        </button>
+        <div className="hidden md:flex items-center gap-4">
+          <button
+            onClick={() => setZoom(z => z + 0.1)}
+            className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+          >
+            Zoom In
+          </button>
+          <button
+            onClick={() => setZoom(z => Math.max(0.1, z - 0.1))}
+            className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+          >
+            Zoom Out
+          </button>
+        </div>
         <button
           onClick={() => setIsScrollMode(!isScrollMode)}
           className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition-colors"

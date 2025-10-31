@@ -5,8 +5,8 @@ const fetch = require('node-fetch').default;
 const EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
 
 const MANGA_METADATA = {
-  "Sensei-wa-Koi-wo-Oshierarenai": {
-    baseUrl: "https://ytimgf.youtube-anime.com/images138/yTX9xTpQqPLaKJckB/",
+  "Houkago-Bokura-wa-Uchuu-ni-Madou": {
+    baseUrl: "https://ytimgf.youtube-anime.com/images133/LqWyqbDCPsXG7M7qn/",
     version: "v1"
   },
   // "Sensei-wa-Koi-wo-Oshierarenai": {
@@ -21,10 +21,19 @@ const MANGA_METADATA = {
 // Define your download jobs here
 const DOWNLOAD_JOBS = [
   {
-    mangaTitle: "Sensei-wa-Koi-wo-Oshierarenai",
+    mangaTitle: "Houkago-Bokura-wa-Uchuu-ni-Madou",
     // Specify chapter number and its configuration
     chapters: {
-      "1": { imageCount: 18 },
+      "21": { imageCount: 11 , sub: "sub_1755024386" },
+      "22": { imageCount: 11 , sub: "sub_1755534695" },
+      "23": { imageCount: 11 , sub: "sub_1756750483" },
+      "24": { imageCount: 12 , sub: "sub_1757450188" },
+      "25": { imageCount: 11 , sub: "sub_1758209511" },
+      "26": { imageCount: 12 , sub: "sub_1758810318" },
+      "27": { imageCount: 11 , sub: "sub_1759330922" },
+      "28": { imageCount: 11 , sub: "sub_1760029512" },
+      "29": { imageCount: 12 , sub: "sub_1760460573" },
+      "30": { imageCount: 11 , sub: "sub_1761849610" },
     },
   },
   // {
