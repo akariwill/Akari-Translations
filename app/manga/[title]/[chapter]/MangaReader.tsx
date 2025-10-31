@@ -28,6 +28,7 @@ export default function MangaReader({ mangaTitle, chapterTitle }: MangaReaderPro
   const [error, setError] = useState<string | null>(null);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [isScrollMode, setIsScrollMode] = useState<boolean>(false);
+  const [zoom, setZoom] = useState(1);
   const router = useRouter();
 
   useEffect(() => {
@@ -57,6 +58,44 @@ export default function MangaReader({ mangaTitle, chapterTitle }: MangaReaderPro
 
     fetchMangaData();
   }, [mangaTitle, chapterTitle]);
+
+  const numPages = chapterImages.length;
+
+  const handlePrevPage = () => {
+    setPageNumber((p) => Math.max(p - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPageNumber((p) => Math.min(p + 1, numPages));
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        handlePrevPage();
+      }
+      if (event.key === 'ArrowRight') {
+        handleNextPage();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [numPages]);
+
+  const handleImageClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const { clientX, currentTarget } = event;
+    const { left, width } = currentTarget.getBoundingClientRect();
+    const clickPosition = clientX - left;
+
+    if (clickPosition < width / 2) {
+      handlePrevPage();
+    } else {
+      handleNextPage();
+    }
+  };
 
   const decodedMangaTitle = mangaTitle ? decodeURIComponent(mangaTitle) : '';
 
@@ -92,8 +131,6 @@ export default function MangaReader({ mangaTitle, chapterTitle }: MangaReaderPro
     router.push(`/manga/${mangaTitle}`);
   };
 
-  const numPages = chapterImages.length;
-
   return (
     <div className="bg-gray-900 min-h-screen text-white">
       {/* Top Bar */}
@@ -127,35 +164,35 @@ export default function MangaReader({ mangaTitle, chapterTitle }: MangaReaderPro
 
       {/* Image Content */}
       <div className="pt-24 pb-24 flex flex-col items-center space-y-2">
-        {isScrollMode ? (
-          chapterImages.map((imageUrl, index) => (
-            <div key={index} className="relative w-full max-w-4xl h-auto">
-              <Image
-                src={imageUrl}
-                alt={`${decodedMangaTitle} page ${index + 1}`}
-                layout="responsive"
-                width={800}
-                height={1200}
-                objectFit="contain"
-                className="rounded-md"
-              />
+        <div style={{ transform: `scale(${zoom})`, transformOrigin: 'top' }}>
+          {isScrollMode ? (
+            chapterImages.map((imageUrl, index) => (
+              <div key={index} className="relative w-full max-w-4xl h-auto">
+                <Image
+                  src={imageUrl}
+                  alt={`${decodedMangaTitle} page ${index + 1}`}
+                  width={800}
+                  height={1200}
+                  style={{ objectFit: "contain" }}
+                  className="rounded-md"
+                />
+              </div>
+            ))
+          ) : (
+            <div className="relative w-full max-w-4xl h-auto cursor-pointer" onClick={handleImageClick}>
+              {chapterImages[pageNumber - 1] && (
+                <Image
+                  src={chapterImages[pageNumber - 1]}
+                  alt={`${decodedMangaTitle} page ${pageNumber}`}
+                  width={800}
+                  height={1200}
+                  style={{ objectFit: "contain" }}
+                  className="rounded-md"
+                />
+              )}
             </div>
-          ))
-        ) : (
-          <div className="relative w-full max-w-4xl h-auto">
-            {chapterImages[pageNumber - 1] && (
-              <Image
-                src={chapterImages[pageNumber - 1]}
-                alt={`${decodedMangaTitle} page ${pageNumber}`}
-                layout="responsive"
-                width={800}
-                height={1200}
-                objectFit="contain"
-                className="rounded-md"
-              />
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Bottom Bar */}
@@ -163,7 +200,7 @@ export default function MangaReader({ mangaTitle, chapterTitle }: MangaReaderPro
         {!isScrollMode && (
           <>
             <button
-              onClick={() => setPageNumber((p) => Math.max(p - 1, 1))}
+              onClick={handlePrevPage}
               disabled={pageNumber <= 1}
               className="px-4 py-2 bg-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-600 transition-colors"
             >
@@ -173,7 +210,7 @@ export default function MangaReader({ mangaTitle, chapterTitle }: MangaReaderPro
               {pageNumber} / {numPages}
             </p>
             <button
-              onClick={() => setPageNumber((p) => Math.min(p + 1, numPages))}
+              onClick={handleNextPage}
               disabled={pageNumber >= numPages}
               className="px-4 py-2 bg-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-600 transition-colors"
             >
@@ -181,6 +218,18 @@ export default function MangaReader({ mangaTitle, chapterTitle }: MangaReaderPro
             </button>
           </>
         )}
+        <button
+          onClick={() => setZoom(z => z + 0.1)}
+          className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+        >
+          Zoom In
+        </button>
+        <button
+          onClick={() => setZoom(z => Math.max(0.1, z - 0.1))}
+          className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+        >
+          Zoom Out
+        </button>
         <button
           onClick={() => setIsScrollMode(!isScrollMode)}
           className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition-colors"

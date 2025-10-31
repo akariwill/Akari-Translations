@@ -4,28 +4,27 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-interface Manga {
+interface Anime {
   title: string;
   cover: string;
-  synopsis: string;
 }
 
-export default function MangaList() {
-  const [manga, setManga] = useState<Manga[]>([]);
+export default function AnimeList() {
+  const [anime, setAnime] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('default');
 
   useEffect(() => {
-    async function fetchManga() {
+    async function fetchAnime() {
       try {
-        const response = await fetch('/api/manga');
+        const response = await fetch('/api/anime');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setManga(data);
+        setAnime(data);
       } catch (e: any) {
         setError(e.message);
       } finally {
@@ -33,12 +32,12 @@ export default function MangaList() {
       }
     }
 
-    fetchManga();
+    fetchAnime();
   }, []);
 
-  const filteredManga = manga.filter(m => m.title.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredAnime = anime.filter(a => a.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
-  const sortedManga = [...filteredManga].sort((a, b) => {
+  const sortedAnime = [...filteredAnime].sort((a, b) => {
     if (sortOrder === 'asc') {
       return a.title.localeCompare(b.title);
     } else if (sortOrder === 'desc') {
@@ -48,7 +47,7 @@ export default function MangaList() {
   });
 
   if (loading) {
-    return <div className="container mx-auto p-4 text-white">Loading manga...</div>;
+    return <div className="container mx-auto p-4 text-white">Loading anime...</div>;
   }
 
   if (error) {
@@ -58,7 +57,7 @@ export default function MangaList() {
   return (
       <main className="container mx-auto px-4 py-8 flex-grow">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-white">Manga Series</h1>
+          <h1 className="text-3xl font-bold text-white">Anime Series</h1>
           <div className="flex gap-4 items-center">
             <div className="flex gap-2">
               <button onClick={() => setSortOrder('asc')} className={`px-3 py-1 rounded-md text-sm font-medium ${sortOrder === 'asc' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>A-Z</button>
@@ -66,7 +65,7 @@ export default function MangaList() {
             </div>
             <input
               type="text"
-              placeholder="Search manga..."
+              placeholder="Search anime..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="bg-gray-800 text-white border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -74,16 +73,16 @@ export default function MangaList() {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {sortedManga.map((m, index) => (
+          {sortedAnime.map((a, index) => (
             <Link
-              key={m.title}
-              href={`/manga/${encodeURIComponent(m.title)}`}
+              key={a.title}
+              href={`/anime/${encodeURIComponent(a.title)}`}
               className="group block bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 hover:border-gray-500 h-80 relative"
             >
               <div className="w-full h-full relative">
                 <Image
-                  src={m.cover || "/placeholder.jpg"}
-                  alt={m.title}
+                  src={a.cover || "/placeholder.jpg"}
+                  alt={a.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   style={{ objectFit: "cover" }}
@@ -93,7 +92,7 @@ export default function MangaList() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent"></div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-4">
-                <h3 className="text-lg font-bold truncate group-hover:text-white transition-colors duration-300">{m.title}</h3>
+                <h3 className="text-lg font-bold truncate group-hover:text-white transition-colors duration-300">{a.title}</h3>
               </div>
             </Link>
           ))}

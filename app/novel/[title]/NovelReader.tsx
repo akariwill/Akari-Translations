@@ -11,6 +11,14 @@ export default function NovelReader({ novel, selectedVolume, setSelectedVolume }
   const [isScrollMode, setIsScrollMode] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (novel && selectedVolume) {
+      const history = JSON.parse(localStorage.getItem('novelHistory') || '{}');
+      history[novel.title] = selectedVolume;
+      localStorage.setItem('novelHistory', JSON.stringify(history));
+    }
+  }, [novel, selectedVolume]);
+
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);
     setPageNumber(1); // Reset to first page on new document load

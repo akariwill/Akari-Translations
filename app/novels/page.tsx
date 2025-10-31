@@ -14,6 +14,8 @@ export default function NovelsList() {
   const [novels, setNovels] = useState<Novel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOrder, setSortOrder] = useState('default');
 
   useEffect(() => {
     async function fetchNovels() {
@@ -34,6 +36,17 @@ export default function NovelsList() {
     fetchNovels();
   }, []);
 
+  const filteredNovels = novels.filter(n => n.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  const sortedNovels = [...filteredNovels].sort((a, b) => {
+    if (sortOrder === 'asc') {
+      return a.title.localeCompare(b.title);
+    } else if (sortOrder === 'desc') {
+      return b.title.localeCompare(a.title);
+    }
+    return 0;
+  });
+
   if (loading) {
     return <div className="container mx-auto p-4 text-white">Loading novels...</div>;
   }
@@ -43,36 +56,39 @@ export default function NovelsList() {
   }
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen flex flex-col">
-      <header className="bg-gray-800 shadow-md">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">
-            <a href="/">📖 Akari Translations</a>
-          </h1>
-          <nav>
-            <a href="/about" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
-            <a href="/novels" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Novels</a>
-            <a href="/manga" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Manga</a>
-          </nav>
-        </div>
-      </header>
-
       <main className="container mx-auto px-4 py-8 flex-grow">
-        <h1 className="text-3xl font-bold mb-6 text-white">Light Novels</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-white">Light Novels</h1>
+          <div className="flex gap-4 items-center">
+            <div className="flex gap-2">
+              <button onClick={() => setSortOrder('asc')} className={`px-3 py-1 rounded-md text-sm font-medium ${sortOrder === 'asc' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>A-Z</button>
+              <button onClick={() => setSortOrder('desc')} className={`px-3 py-1 rounded-md text-sm font-medium ${sortOrder === 'desc' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>Z-A</button>
+            </div>
+            <input
+              type="text"
+              placeholder="Search novels..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-gray-800 text-white border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {novels.map((n) => (
+          {sortedNovels.map((n, index) => (
             <Link
               key={n.title}
               href={`/novel/${encodeURIComponent(n.title)}`}
               className="group block bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 hover:border-gray-500 h-80 relative"
             >
-              <div className="w-full h-full">
+              <div className="w-full h-full relative">
                 <Image
                   src={n.cover || "/placeholder.jpg"}
                   alt={n.title}
-                  layout="fill"
-                  objectFit="cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  style={{ objectFit: "cover" }}
                   className="w-full h-full"
+                  priority={index === 0}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent"></div>
               </div>
@@ -83,12 +99,5 @@ export default function NovelsList() {
           ))}
         </div>
       </main>
-
-      <footer className="bg-gray-800 mt-12 py-6">
-        <div className="container mx-auto px-4 text-center text-gray-400">
-          <p>&copy; 2025 Akari Translations. All Rights Reserved.</p>
-        </div>
-      </footer>
-    </div>
   );
 }
