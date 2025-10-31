@@ -56,20 +56,20 @@ export default function AnimeList() {
 
   return (
       <main className="container mx-auto px-4 py-8 flex-grow">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-white">Anime Series</h1>
-          <div className="flex gap-4 items-center">
-            <div className="flex gap-2">
-              <button onClick={() => setSortOrder('asc')} className={`px-3 py-1 rounded-md text-sm font-medium ${sortOrder === 'asc' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>A-Z</button>
-              <button onClick={() => setSortOrder('desc')} className={`px-3 py-1 rounded-md text-sm font-medium ${sortOrder === 'desc' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>Z-A</button>
-            </div>
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+          <h1 className="text-3xl font-bold text-white text-center sm:text-left">Anime Series</h1>
+          <div className="flex flex-col sm:flex-row gap-4 items-center w-full sm:w-auto">
             <input
               type="text"
               placeholder="Search anime..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-gray-800 text-white border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-gray-800 text-white border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             />
+            <div className="flex gap-2">
+              <button onClick={() => setSortOrder('asc')} className={`px-3 py-1 rounded-md text-sm font-medium ${sortOrder === 'asc' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>A-Z</button>
+              <button onClick={() => setSortOrder('desc')} className={`px-3 py-1 rounded-md text-sm font-medium ${sortOrder === 'desc' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>Z-A</button>
+            </div>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
