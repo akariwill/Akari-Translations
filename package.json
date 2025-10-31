@@ -9,7 +9,7 @@
     "generate-anime-data": "node scripts/generate-anime-data.js",
     "download-manga-chapter": "node scripts/download-manga-chapter.js",
     "optimize-images": "node scripts/optimize-images.js",
-    "build": "npm run optimize-images && npm run generate-novels-data && npm run generate-manga-data && npm run generate-anime-data && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
