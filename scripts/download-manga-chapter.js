@@ -5,47 +5,35 @@ const fetch = require('node-fetch').default;
 const EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
 
 const MANGA_METADATA = {
-  "Houkago-Bokura-wa-Uchuu-ni-Madou": {
-    baseUrl: "https://ytimgf.youtube-anime.com/images133/LqWyqbDCPsXG7M7qn/",
-    version: "v1"
+  "Kono-Kaisha-ni-Suki-na-Hito-ga-Imasu": {
+    baseUrl: "https://ytimgf.youtube-anime.com/images133/BTjTvDthEgWAGWtQt/",
+    version: "v1",
+    defaultSub: "sub"
   },
   // "Sensei-wa-Koi-wo-Oshierarenai": {
-  //   baseUrl: "https://ytimgf.youtube-anime.com/images7/yTX9xTpQqPLaKJckB/47/sub_1.png",
+  //   baseUrl: "https://ytimgf.youtube-anime.com/images7/yTX9xTpQqPLaKJckB/47/",
   //   version: "v2"
-  // },
-  // "Another-Manga-Title": {
-  //   baseUrl: "https://example.com/manga/another-manga-title",
   // },
 };
 
 // Define your download jobs here
 const DOWNLOAD_JOBS = [
   {
-    mangaTitle: "Houkago-Bokura-wa-Uchuu-ni-Madou",
-    // Specify chapter number and its configuration
+    mangaTitle: "Kono-Kaisha-ni-Suki-na-Hito-ga-Imasu",
+    startChapter: 41,
+    endChapter: 50,
+    // You can still define specific subs for chapters if needed
     chapters: {
-      "21": { imageCount: 11 , sub: "sub_1755024386" },
-      "22": { imageCount: 11 , sub: "sub_1755534695" },
-      "23": { imageCount: 11 , sub: "sub_1756750483" },
-      "24": { imageCount: 12 , sub: "sub_1757450188" },
-      "25": { imageCount: 11 , sub: "sub_1758209511" },
-      "26": { imageCount: 12 , sub: "sub_1758810318" },
-      "27": { imageCount: 11 , sub: "sub_1759330922" },
-      "28": { imageCount: 11 , sub: "sub_1760029512" },
-      "29": { imageCount: 12 , sub: "sub_1760460573" },
-      "30": { imageCount: 11 , sub: "sub_1761849610" },
+      // "51": { sub: "sub_1759530565"},
+      // "45": { sub: "sub_1759530565"},
+      // "46": { sub: "sub_1759530565"},
+      // "47": { sub: "sub_1759530565"},
+      // "48": { sub: "sub_1759530565"},
+      // "49": { sub: "sub_1759530565"},
+      // "50": { sub: "sub_1759530565"},
     },
   },
-  // {
-  //   mangaTitle: "Another-Manga-Title",
-  //   chapters: {
-  //     "10": { imageCount: 20 },
-  //     "11": { imageCount: 22, sub: "custom_sub" },
-  //   },
-  // },
 ];
-
-
 
 async function downloadImage(imageUrl, filePath) {
   try {
@@ -71,21 +59,31 @@ async function downloadImage(imageUrl, filePath) {
   }
 }
 
-async function downloadMangaChapter(mangaTitle, chapterNumber, baseUrl, imageCount, sub = 'sub') {
+async function downloadMangaChapter(mangaTitle, chapterNumber, baseUrl, sub) {
   const chapterFolderName = `Chapter ${chapterNumber}`;
   const targetDir = path.join(process.cwd(), 'public', 'manga', mangaTitle, chapterFolderName);
 
-  if (!fs.existsSync(targetDir)) {
+  if (fs.existsSync(targetDir)) {
+    const files = fs.readdirSync(targetDir);
+    if (files.length > 0) {
+      console.log(`Chapter ${chapterNumber} for ${mangaTitle} already exists and is not empty. Skipping download.`);
+      return; // Skip download if chapter directory exists and is not empty
+    }
+  } else {
     fs.mkdirSync(targetDir, { recursive: true });
     console.log(`Created directory: ${targetDir}`);
   }
 
-  console.log(`\nStarting download for ${mangaTitle} - Chapter ${chapterNumber} (${imageCount} images)`);
+  console.log(`
+Starting download for ${mangaTitle} - Chapter ${chapterNumber}`);
 
-  for (let i = 1; i <= imageCount; i++) {
+  let i = 1;
+  while (true) {
     let downloaded = false;
     for (const ext of EXTENSIONS) {
-      const imageUrl = `${baseUrl}/${chapterNumber}/${sub}/${i}.${ext}`;
+      const imageUrl = sub 
+        ? `${baseUrl}/${chapterNumber}/${sub}/${i}.${ext}`
+        : `${baseUrl}/${chapterNumber}/${i}.${ext}`;
       const fileName = `${String(i).padStart(3, '0')}.${ext}`;
       const filePath = path.join(targetDir, fileName);
 
@@ -94,28 +92,41 @@ async function downloadMangaChapter(mangaTitle, chapterNumber, baseUrl, imageCou
         break;
       }
     }
-    if (!downloaded) {
-      console.warn(`Could not download page ${i} for ${mangaTitle} - Chapter ${chapterNumber}.`);
+    if (downloaded) {
+      i++;
+    } else {
+      console.log(`Could not find more images for ${mangaTitle} - Chapter ${chapterNumber} after image ${i - 1}.`);
+      break;
     }
   }
   console.log(`Finished downloading ${mangaTitle} - Chapter ${chapterNumber}.`);
 }
 
-async function downloadMangaChapterV2(mangaTitle, chapterNumber, baseUrl, imageCount, sub = 'sub') {
+async function downloadMangaChapterV2(mangaTitle, chapterNumber, baseUrl, sub) {
   const chapterFolderName = `Chapter ${chapterNumber}`;
   const targetDir = path.join(process.cwd(), 'public', 'manga', mangaTitle, chapterFolderName);
 
-  if (!fs.existsSync(targetDir)) {
+  if (fs.existsSync(targetDir)) {
+    const files = fs.readdirSync(targetDir);
+    if (files.length > 0) {
+      console.log(`Chapter ${chapterNumber} for ${mangaTitle} already exists and is not empty. Skipping download.`);
+      return; // Skip download if chapter directory exists and is not empty
+    }
+  } else {
     fs.mkdirSync(targetDir, { recursive: true });
     console.log(`Created directory: ${targetDir}`);
   }
 
-  console.log(`\nStarting download for ${mangaTitle} - Chapter ${chapterNumber} (${imageCount} images)`);
+  console.log(`
+Starting download for ${mangaTitle} - Chapter ${chapterNumber}`);
 
-  for (let i = 1; i <= imageCount; i++) {
+  let i = 1;
+  while (true) {
     let downloaded = false;
     for (const ext of EXTENSIONS) {
-      const imageUrl = `${baseUrl}${chapterNumber}/${sub}_${i}.${ext}`;
+      const imageUrl = sub
+        ? `${baseUrl}${chapterNumber}/${sub}_${i}.${ext}`
+        : `${baseUrl}${chapterNumber}/${i}.${ext}`;
       const fileName = `${String(i).padStart(3, '0')}.${ext}`;
       const filePath = path.join(targetDir, fileName);
 
@@ -124,8 +135,11 @@ async function downloadMangaChapterV2(mangaTitle, chapterNumber, baseUrl, imageC
         break;
       }
     }
-    if (!downloaded) {
-      console.warn(`Could not download page ${i} for ${mangaTitle} - Chapter ${chapterNumber}.`);
+    if (downloaded) {
+      i++;
+    } else {
+      console.log(`Could not find more images for ${mangaTitle} - Chapter ${chapterNumber} after image ${i - 1}.`);
+      break;
     }
   }
   console.log(`Finished downloading ${mangaTitle} - Chapter ${chapterNumber}.`);
@@ -140,10 +154,10 @@ async function main() {
   console.log(`Found ${DOWNLOAD_JOBS.length} download job(s).`);
 
   for (const job of DOWNLOAD_JOBS) {
-    const { mangaTitle, chapters } = job;
+    const { mangaTitle, startChapter, endChapter, chapters } = job;
 
-    if (!mangaTitle || !chapters) {
-      console.error(`Skipping invalid job: ${JSON.stringify(job)}. Each job must have "mangaTitle" and "chapters".`);
+    if (!mangaTitle || !startChapter || !endChapter) {
+      console.error(`Skipping invalid job: ${JSON.stringify(job)}. Each job must have "mangaTitle", "startChapter", and "endChapter".`);
       continue;
     }
 
@@ -153,45 +167,35 @@ async function main() {
       continue;
     }
 
-    const chapterEntries = Object.entries(chapters);
-    if (chapterEntries.length === 0) {
-      console.error(`No chapters specified for job "${mangaTitle}".`);
-      continue;
-    }
+    console.log(`
+Processing job for "${mangaTitle}" from chapter ${startChapter} to ${endChapter}...`);
 
-    console.log(`\nProcessing job for "${mangaTitle}"...`);
-
-    for (const [chapterNum, chapterData] of chapterEntries) {
-      // Handle both object and direct number for chapterData for backward compatibility
-      const imageCount = typeof chapterData === 'object' ? chapterData.imageCount : chapterData;
-      const sub = typeof chapterData === 'object' ? chapterData.sub : undefined;
-
-      if (!imageCount) {
-        console.error(`Skipping chapter ${chapterNum} for "${mangaTitle}" due to missing imageCount.`);
-        continue;
+    for (let chapterNum = startChapter; chapterNum <= endChapter; chapterNum++) {
+      const chapterStr = String(chapterNum);
+      const chapterData = chapters ? chapters[chapterStr] : undefined;
+      let sub = chapterData ? chapterData.sub : undefined;
+      if (sub === undefined && mangaMetadata.defaultSub) {
+        sub = mangaMetadata.defaultSub;
       }
 
       if (mangaMetadata.version === 'v2') {
         await downloadMangaChapterV2(
           mangaTitle,
-          chapterNum,
+          chapterStr,
           mangaMetadata.baseUrl,
-          imageCount,
-          sub // Pass sub; it will be undefined if not present, and the default will be used
+          sub
         );
       } else {
         await downloadMangaChapter(
           mangaTitle,
-          chapterNum,
+          chapterStr,
           mangaMetadata.baseUrl,
-          imageCount,
-          sub // Pass sub; it will be undefined if not present, and the default will be used
+          sub
         );
       }
     }
   }
 
-  console.log("\nAll download jobs have been processed.");
-}
+  console.log("All download jobs have been processed.");}
 
 main();
